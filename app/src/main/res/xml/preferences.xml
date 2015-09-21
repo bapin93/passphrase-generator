@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:key="passphrase_strength"
+        android:title="@string/passphrase_strength_basic_pref_title"
+        android:summary="@string/passphrase_strength_basic_pref_summary"
+        android:entries="@array/strength_labels"
+        android:entryValues="@array/strength_values"
+        android:defaultValue="16" />
+    <EditTextPreference
+        android:key="custom_strength"
+        android:title="@string/passphrase_strenght_custom_pref_title"
+        android:summary="@string/passphrase_strenght_custom_pref_summary"
+        android:inputType="number"
+        android:defaultValue="16"
+        android:enabled="false" />
+
+</PreferenceScreen>
