@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -12,36 +11,43 @@ import android.util.Log;
 public class SettingsFragment extends PreferenceFragment implements OnPreferenceChangeListener {
 
     private Preference mCustomStrengthPreference;
+    private Preference mBasicStrengthPreference;
+    private String[] mStrengthValues;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        Preference basicStrengthPreference = findPreference("passphrase_strength");
-        basicStrengthPreference.setOnPreferenceChangeListener(this);
-        mCustomStrengthPreference = findPreference("custom_strength");
-        String[] strengthValues = getResources().getStringArray(R.array.strength_values);
-        if(basicStrengthPreference.getSharedPreferences().getString(basicStrengthPreference.getKey(), strengthValues[1]).equals(strengthValues[4])) {
-            mCustomStrengthPreference.setEnabled(true);
-        }
+        initialize();
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Log.d(getClass().getName(), "Got Click");
         boolean result = false;
-        String[] strengthValues = getResources().getStringArray(R.array.strength_values);
         if (preference.getKey().equals("passphrase_strength")) {
-            if (newValue.toString().equals(strengthValues[4])) {
+            if (newValue.toString().equals(mStrengthValues[4])) {
                 mCustomStrengthPreference.setEnabled(true);
                 result = true;
-                Log.d(getClass().getName(), "Set Custom");
             } else {
                 mCustomStrengthPreference.setEnabled(false);
                 result = true;
-                Log.d(getClass().getName(), "Set Not Custom");
             }
+        } else if (preference.getKey().equals("custom_strength")) {
+            result = true;
         }
         return result;
+    }
+
+    private void initialize() {
+        mBasicStrengthPreference = findPreference("passphrase_strength");
+        mCustomStrengthPreference = findPreference("custom_strength");
+        mStrengthValues = getResources().getStringArray(R.array.strength_values);
+        if(mBasicStrengthPreference.getSharedPreferences().getString(mBasicStrengthPreference
+                .getKey(), mStrengthValues[1]).equals(mStrengthValues[4])) {
+            mCustomStrengthPreference.setEnabled(true);
+        }
+        mBasicStrengthPreference.setOnPreferenceChangeListener(this);
+        mBasicStrengthPreference.setOnPreferenceChangeListener(this);
+
     }
 }
