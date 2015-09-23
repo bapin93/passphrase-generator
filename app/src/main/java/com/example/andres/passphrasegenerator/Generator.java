@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 
@@ -83,6 +84,15 @@ public class Generator {
         mRequiresSpecialCharacter = requiresSpecialCharacter;
     }
 
+    public String generatePhrase() {
+        String result = "";
+        do {
+            result += mPhraseMap.get(generateKey());
+        } while (result.length() < mMinumumLength);
+        result = result.replaceAll("\\s", "");
+        return result;
+    }
+
     /**
      *
      * @param context
@@ -117,4 +127,16 @@ public class Generator {
         });
         return result;
     }
+
+    private int generateKey() {
+        int result = 0;
+        Random rand = new Random();
+        for(int i = 0; i < 5; i++) {
+            result += (rand.nextInt((6 - 1) + 1) + 1) * Math.pow(10, i);
+        }
+        Log.d(getClass().getName().toString(), "Generated Key: " + result);
+        return result;
+    }
+
+
 }

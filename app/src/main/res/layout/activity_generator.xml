@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/space"
-        android:text="@string/generate_passphrase"/>
+        android:text="@string/generate_passphrase"
+        android:onClick="generatePhrase"/>
 
     <Space
         android:id="@+id/space"

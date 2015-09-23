@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 public class GeneratorView extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -66,6 +68,11 @@ public class GeneratorView extends Activity implements SharedPreferences.OnShare
             String strengthValue = sharedPreferences.getString("custom_strength", strengthValues[1]);
             mGenerator.setMinimumLength(Integer.parseInt(strengthValue));
         }
+    }
+
+    public void generatePhrase(View view) {
+        TextView label = (TextView) findViewById(R.id.passphrase);
+        label.setText(String.valueOf(mGenerator.generatePhrase()));
     }
 
     private void initialize() {
