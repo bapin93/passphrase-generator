@@ -33,11 +33,16 @@ public class SettingsFragment extends PreferenceFragment implements OnPreference
                 result = true;
             }
         } else if (preference.getKey().equals("custom_strength")) {
-            result = true;
+            if (Integer.parseInt(newValue.toString()) < 3) {
+
+            }
         }
         return result;
     }
 
+    /**
+     *
+     */
     private void initialize() {
         mBasicStrengthPreference = findPreference("passphrase_strength");
         mCustomStrengthPreference = findPreference("custom_strength");

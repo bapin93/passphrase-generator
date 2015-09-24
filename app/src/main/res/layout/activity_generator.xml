@@ -3,16 +3,19 @@
     android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Generator">
-
+    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".Generator"
+    android:background="#d2d2d5">
 
     <Button
         android:id="@+id/generate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/generate_button_diameter"
+        android:layout_height="@dimen/generate_button_diameter"
         android:layout_above="@+id/space"
+        android:layout_centerHorizontal="true"
         android:text="@string/generate_passphrase"
-        android:onClick="generatePhrase"/>
+        android:textColor="#ffffff"
+        android:onClick="generatePhrase"
+        android:background="@drawable/circle_button"/>
 
     <Space
         android:id="@+id/space"
@@ -23,10 +26,12 @@
     <TextView
         android:id="@+id/passphrase"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="32dp"
         android:layout_below="@id/space"
         android:gravity="center_horizontal"
-        android:text="placeholder"
-        android:textSize="20dp" />
+        android:text="@string/passphrase_placeholder"
+        android:textColor="#5b5b5b"
+        android:textSize="20dp"
+        android:background="@drawable/passphrase_border"/>
 
 </RelativeLayout>

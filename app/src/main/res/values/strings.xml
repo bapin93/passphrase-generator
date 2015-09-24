@@ -1,16 +1,24 @@
 <resources>
-    <string name="app_name">PassPhraseGenerator</string>
+    <string name="app_name">Password Generator</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="generate_passphrase">Generate Passphrase</string>
+    <string name="action_generator">Generator</string>
+    <string name="generate_passphrase">Generate Password</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="passphrase_strength_basic_pref_title">Passphrase Strength</string>
+    <string name="passphrase_strength_basic_pref_title">Password Strength</string>
     <string name="passphrase_strenght_custom_pref_title">Custom Strength</string>
-    <string name="passphrase_strength_basic_pref_summary">Choose your minimum passphrase
+    <string name="requires_uppercase_pref_title">Requires capital letter?</string>
+    <string name="requires_special_character_pref_title">Requires special character?</string>
+    <string name="requires_number_pref_title">Requires number?</string>
+    <string name="passphrase_strength_basic_pref_summary">Choose your minimum password
         strength</string>
     <string name="passphrase_strenght_custom_pref_summary">Choose a custom value for the minimum
-        number of characters in your passphrase</string>
+        number of characters in your password</string>
+    <string name="requires_special_character_pref_summary">Check the box if your password requires a special character</string>
+    <string name="requires_uppercase_pref_summary">Check the box if your password requires a capital letter</string>
+    <string name="requires_number_pref_summary">Check the box if your password requires a number</string>
+    <string name="passphrase_placeholder">Click "Generate Passphrase"</string>
 
     <string-array name="strength_labels">
         <item>Weak (8 Characters)</item>

@@ -16,14 +16,11 @@ public class GeneratorView extends Activity implements SharedPreferences.OnShare
     private Generator mGenerator;
     private SharedPreferences.OnSharedPreferenceChangeListener mSettingsListener;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_generator);
         initialize();
-
-
     }
 
     @Override
@@ -67,34 +64,34 @@ public class GeneratorView extends Activity implements SharedPreferences.OnShare
         } else if (key.equals("custom_strength")) {
             String strengthValue = sharedPreferences.getString("custom_strength", strengthValues[1]);
             mGenerator.setMinimumLength(Integer.parseInt(strengthValue));
+        } else if (key.equals("requires_uppercase")) {
+            boolean uppercase = mSharedPreferences.getBoolean("requires_uppercase", false);
+            mGenerator.setRequiresUppercase(uppercase);
+        } else if (key.equals("requires_special_character")) {
+            boolean spacialCharacter = mSharedPreferences.getBoolean("requires_special_character", false);
+            mGenerator.setRequiresSpecialCharacter(spacialCharacter);
+        } else if (key.equals("requires_number")) {
+            boolean number = mSharedPreferences.getBoolean("requires_number", false);
+            mGenerator.setRequiresNumber(number);
         }
     }
 
+    /**
+     *
+     * @param view
+     */
     public void generatePhrase(View view) {
         TextView label = (TextView) findViewById(R.id.passphrase);
         label.setText(String.valueOf(mGenerator.generatePhrase()));
     }
 
+    /**
+     *
+     */
     private void initialize() {
         mGenerator = new Generator(getApplicationContext(), R.raw.passphrase_words);
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        fillGeneratorWithPreferences();
-    }
-
-    private void fillGeneratorWithPreferences() {
-        String[] strengthValues = getResources().getStringArray(R.array.strength_values);
-        String strengthValue = mSharedPreferences.getString("passphrase_strength", strengthValues[1]);
-        try {
-            if (strengthValue.equals(strengthValues[4])) {
-                strengthValue = mSharedPreferences.getString("custom_strength", strengthValues[1]);
-                mGenerator.setMinimumLength(Integer.parseInt(strengthValue));
-            } else {
-                mGenerator.setMinimumLength(Integer.parseInt(strengthValue));
-            }
-        } catch (NumberFormatException e) {
-            mGenerator.setMinimumLength(8);
-        }
-
+        mGenerator.fillGeneratorWithPreferences(getApplicationContext(), mSharedPreferences);
     }
 }
