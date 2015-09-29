@@ -13,9 +13,10 @@
         android:layout_above="@+id/space"
         android:layout_centerHorizontal="true"
         android:text="@string/generate_passphrase"
+        android:enabled="false"
         android:textColor="#ffffff"
         android:onClick="generatePhrase"
-        android:background="@drawable/circle_button"/>
+        android:background="@drawable/circle_button" />
 
     <Space
         android:id="@+id/space"
@@ -26,7 +27,7 @@
     <TextView
         android:id="@+id/passphrase"
         android:layout_width="match_parent"
-        android:layout_height="32dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/space"
         android:gravity="center_horizontal"
         android:text="@string/passphrase_placeholder"

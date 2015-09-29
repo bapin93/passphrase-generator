@@ -19,7 +19,6 @@
     <string name="requires_uppercase_pref_summary">Check the box if your password requires a capital letter</string>
     <string name="requires_number_pref_summary">Check the box if your password requires a number</string>
     <string name="passphrase_placeholder">Click "Generate Passphrase"</string>
-
     <string-array name="strength_labels">
         <item>Weak (8 Characters)</item>
         <item>Medium (16 Characters)</item>

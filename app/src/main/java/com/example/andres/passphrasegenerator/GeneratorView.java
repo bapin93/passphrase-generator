@@ -10,11 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-public class GeneratorView extends Activity implements SharedPreferences.OnSharedPreferenceChangeListener {
+/**
+ * The GeneratorView controls the activity_generator layout
+ */
+public class GeneratorView extends Activity implements SharedPreferences
+        .OnSharedPreferenceChangeListener {
 
     private SharedPreferences mSharedPreferences;
     private Generator mGenerator;
-    private SharedPreferences.OnSharedPreferenceChangeListener mSettingsListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,36 +52,48 @@ public class GeneratorView extends Activity implements SharedPreferences.OnShare
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
         final String[] strengthValues = getResources().getStringArray(R.array.strength_values);
-        if (key.equals("passphrase_strength")) {
-            String strengthValue = sharedPreferences.getString("passphrase_strength", strengthValues[1]);
-            try {
-                if (strengthValue.equals(strengthValues[4])) {
-                    strengthValue = mSharedPreferences.getString("custom_strength", strengthValues[1]);
-                    mGenerator.setMinimumLength(Integer.parseInt(strengthValue));
-                } else {
-                    mGenerator.setMinimumLength(Integer.parseInt(strengthValue));
+        switch (key) {
+            case "passphrase_strength":
+                String strengthValue = sharedPreferences.getString("passphrase_strength",
+                        strengthValues[1]);
+                try {
+                    if (strengthValue.equals(strengthValues[4])) {
+                        strengthValue = mSharedPreferences.getString("custom_strength",
+                                strengthValues[1]);
+                        mGenerator.setMinimumLength(Integer.parseInt(strengthValue));
+                    } else {
+                        mGenerator.setMinimumLength(Integer.parseInt(strengthValue));
+                    }
+                } catch (NumberFormatException e) {
+                    mGenerator.setMinimumLength(8);
                 }
-            } catch (NumberFormatException e) {
-                mGenerator.setMinimumLength(8);
-            }
-        } else if (key.equals("custom_strength")) {
-            String strengthValue = sharedPreferences.getString("custom_strength", strengthValues[1]);
-            mGenerator.setMinimumLength(Integer.parseInt(strengthValue));
-        } else if (key.equals("requires_uppercase")) {
-            boolean uppercase = mSharedPreferences.getBoolean("requires_uppercase", false);
-            mGenerator.setRequiresUppercase(uppercase);
-        } else if (key.equals("requires_special_character")) {
-            boolean spacialCharacter = mSharedPreferences.getBoolean("requires_special_character", false);
-            mGenerator.setRequiresSpecialCharacter(spacialCharacter);
-        } else if (key.equals("requires_number")) {
-            boolean number = mSharedPreferences.getBoolean("requires_number", false);
-            mGenerator.setRequiresNumber(number);
+                break;
+            case "custom_strength":
+                strengthValue = sharedPreferences.getString("custom_strength",
+                        strengthValues[1]);
+                if (Integer.parseInt(strengthValue) < 6) {
+                    strengthValue = "6";
+                }
+                mGenerator.setMinimumLength(Integer.parseInt(strengthValue));
+                break;
+            case "requires_uppercase":
+                boolean uppercase = mSharedPreferences.getBoolean("requires_uppercase", false);
+                mGenerator.setRequiresUppercase(uppercase);
+                break;
+            case "requires_special_character":
+                boolean spacialCharacter = mSharedPreferences.getBoolean("requires_special_character",
+                        false);
+                mGenerator.setRequiresSpecialCharacter(spacialCharacter);
+                break;
+            case "requires_number":
+                boolean number = mSharedPreferences.getBoolean("requires_number", false);
+                mGenerator.setRequiresNumber(number);
+                break;
         }
     }
 
     /**
-     *
-     * @param view
+     * @param view the view triggering generatePhrase
      */
     public void generatePhrase(View view) {
         TextView label = (TextView) findViewById(R.id.passphrase);
@@ -86,10 +101,11 @@ public class GeneratorView extends Activity implements SharedPreferences.OnShare
     }
 
     /**
-     *
+     * Initializes instance variables
      */
     private void initialize() {
-        mGenerator = new Generator(getApplicationContext(), R.raw.passphrase_words);
+        mGenerator = new Generator(getApplicationContext(), R.raw.passphrase_words,
+                findViewById(R.id.generate));
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
         mGenerator.fillGeneratorWithPreferences(getApplicationContext(), mSharedPreferences);

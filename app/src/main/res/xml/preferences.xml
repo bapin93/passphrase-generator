@@ -18,13 +18,16 @@
     <CheckBoxPreference
         android:key="requires_uppercase"
         android:title="@string/requires_uppercase_pref_title"
-        android:summary="@string/requires_uppercase_pref_summary"/>
+        android:summary="@string/requires_uppercase_pref_summary"
+        android:defaultValue="false"/>
     <CheckBoxPreference
         android:key="requires_special_character"
         android:title="@string/requires_special_character_pref_title"
-        android:summary="@string/requires_special_character_pref_summary"/>
+        android:summary="@string/requires_special_character_pref_summary"
+        android:defaultValue="false"/>
     <CheckBoxPreference
         android:key="requires_number"
         android:title="@string/requires_number_pref_title"
-        android:summary="@string/requires_number_pref_summary"/>
+        android:summary="@string/requires_number_pref_summary"
+        android:defaultValue="false"/>
 </PreferenceScreen>

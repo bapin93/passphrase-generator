@@ -3,6 +3,7 @@ package com.example.andres.passphrasegenerator;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.view.View;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -15,6 +16,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.regex.PatternSyntaxException;
 
 /**
+ * The Generator class creates a model for generating a passphrase
+ *
  * Created by andres on 9/22/15.
  */
 public class Generator {
@@ -28,102 +31,105 @@ public class Generator {
     private boolean mRequiresNumber;
     private ExecutorService mExecutorService;
 
-    public Generator(final Context context, final int resourceId) {
+    /**
+     * @param context the context from which our resources can be accessed
+     * @param resourceId the resource Id of the txt file
+     * @param button the generate button to be enabled when the hash map has been generated
+     */
+    public Generator(final Context context, final int resourceId, final View button) {
         mExecutorService = ServiceUtils.getExecutorService();
-        mPhraseMap = generateMap(context, resourceId);
+        mPhraseMap = generateMap(context, resourceId, button);
     }
 
     /**
-     * @return
+     * @return the minimum length setting
      */
-    public Map getPhraseMap() {
-        return mPhraseMap;
-    }
-
-    /**
-     * @return
-     */
+    @SuppressWarnings("unused")
     public int getMinimumLength() {
         return mMinumumLength;
     }
 
     /**
-     * @param minimumLength
+     * @param minimumLength the minimum length to set
      */
     public void setMinimumLength(final int minimumLength) {
         mMinumumLength = minimumLength;
     }
 
     /**
-     * @return
+     * @return true if the passphrase requires uppercase, otherwise false
      */
+    @SuppressWarnings("unused")
     public boolean isRequiresUppercase() {
         return mRequiresUppercase;
     }
 
     /**
-     * @param requiresUppercase
+     * @param requiresUppercase a boolean specifying if the passphrase requires uppercase or not
      */
     public void setRequiresUppercase(final boolean requiresUppercase) {
         mRequiresUppercase = requiresUppercase;
     }
 
     /**
-     * @return
+     * @return true if the passphrase requires a special character, otherwise false
      */
+    @SuppressWarnings("unused")
     public boolean isRequiresSpecialCharacter() {
         return mRequiresSpecialCharacter;
     }
 
     /**
-     * @param requiresSpecialCharacter
+     * @param requiresSpecialCharacter a boolean specifying if the passphrase requires
+     * a special character or not
      */
     public void setRequiresSpecialCharacter(final boolean requiresSpecialCharacter) {
         mRequiresSpecialCharacter = requiresSpecialCharacter;
     }
 
     /**
-     * @return
+     * @return true if the passphrase requires a number, otherwise false
      */
+    @SuppressWarnings("unused")
     public boolean isRequiresNumber() {
         return mRequiresNumber;
     }
 
     /**
-     * @param requiresNumber
+     * @param requiresNumber a boolean specifying if the passphrase requires a number or not
      */
     public void setRequiresNumber(final boolean requiresNumber) {
         mRequiresNumber = requiresNumber;
     }
 
     /**
-     * @return
+     * @return the generated passphrase
      */
     public String generatePhrase() {
         String result = "";
         do {
             result += mPhraseMap.get(generateKey()).trim();
-            Log.d(getClass().getName().toString(), "Result Length: " + result.length());
-            Log.d(getClass().getName().toString(), "Pre-Result: \"" + result + "\"");
+            Log.d(getClass().getName(), "Result Length: " + result.length());
+            Log.d(getClass().getName(), "Pre-Result: \"" + result + "\"");
         } while (result.length() <= mMinumumLength);
         if (mRequiresUppercase) {
-            Log.d(getClass().getName().toString(), "Requires uppercase...");
+            Log.d(getClass().getName(), "Requires uppercase...");
             result = charToUppercase(result);
         }
         if (mRequiresSpecialCharacter) {
-            Log.d(getClass().getName().toString(), "Requires special character...");
+            Log.d(getClass().getName(), "Requires special character...");
             result = addSpecialCharacter(result);
         }
         if (mRequiresNumber) {
             result = addNumber(result);
         }
-        Log.d(getClass().getName().toString(), "Post-Result: \"" + result + "\"");
+        Log.d(getClass().getName(), "Post-Result: \"" + result + "\"");
         return result;
     }
 
     /**
-     * @param context
-     * @param sharedPreferences
+     * @param context the context from which our resources can be accessed
+     * @param sharedPreferences the application shared preferences
      */
     public void fillGeneratorWithPreferences(final Context context, final SharedPreferences sharedPreferences) {
         String[] strengthValues = context.getResources().getStringArray(R.array.strength_values);
@@ -147,8 +153,8 @@ public class Generator {
     }
 
     /**
-     * @param phrase
-     * @return
+     * @param phrase the phrase to add capital letters to
+     * @return the phrase with randomly capitalized letters
      */
     private String charToUppercase(final String phrase) {
         String result = "";
@@ -164,8 +170,8 @@ public class Generator {
     }
 
     /**
-     * @param phrase
-     * @return
+     * @param phrase the phrase to add a special character to to
+     * @return the phrase with one character replaced by a special character
      */
     private String addSpecialCharacter(final String phrase) {
         String result = phrase;
@@ -177,6 +183,10 @@ public class Generator {
         return result;
     }
 
+    /**
+     * @param phrase the phrase to add a number to
+     * @return the proase with one character replaced by a random number
+     */
     private String addNumber(final String phrase) {
         String result = phrase;
         Random rand = new Random();
@@ -194,12 +204,13 @@ public class Generator {
     }
 
     /**
-     * @param context
-     * @param resourceId
-     * @return
+     * @param context the context from which our resources can be accessed
+     * @param resourceId the resource Id of the txt file
+     * @param button the generate button to be enabled when the hash map has been generated
+     * @return a HashMap containing key, value pairs from the txt file
      */
-    private Map generateMap(final Context context, final int resourceId) {
-        final HashMap result = new HashMap<Integer, String>();
+    private Map generateMap(final Context context, final int resourceId, final View button) {
+        final HashMap result = new HashMap<>();
         mExecutorService.submit(new Runnable() {
             @Override
             public void run() {
@@ -213,10 +224,12 @@ public class Generator {
                     }
                     scan.close();
                     fileInputStream.close();
+                    button.setEnabled(true);
+
                 } catch (FileNotFoundException e) {
-                    Log.d(getClass().getName().toString(), e.getMessage());
+                    Log.d(getClass().getName(), e.getMessage());
                 } catch (IOException e) {
-                    Log.d(getClass().getName().toString(), e.getMessage());
+                    Log.d(getClass().getName(), e.getMessage());
                 }
             }
         });
@@ -224,7 +237,7 @@ public class Generator {
     }
 
     /**
-     * @return
+     * @return a random key associated with any value
      */
     private int generateKey() {
         int result = 0;
@@ -232,20 +245,20 @@ public class Generator {
         for (int i = 0; i < 5; i++) {
             result += (rand.nextInt((6 - 1) + 1) + 1) * Math.pow(10, i);
         }
-        Log.d(getClass().getName().toString(), "Generated Key: " + result);
+        Log.d(getClass().getName(), "Generated Key: " + result);
         return result;
     }
 
     /**
-     * @return
+     * @return a random key associated with a special character
      */
     private int generateSpecialCharacterKey() {
-        Log.d(getClass().getName().toString(), "Generating Special Key...");
+        Log.d(getClass().getName(), "Generating Special Key...");
         int result = SPECIAL_CHARACTER_KEY_PREFIX;
         int[] specialCharacterKeySuffix = {32, 33, 34, 35, 36, 41, 42, 43, 44, 45, 46, 51, 52, 53, 54, 55, 56, 61, 62, 63, 64, 64, 66};
         Random rand = new Random();
         result += specialCharacterKeySuffix[(rand.nextInt(specialCharacterKeySuffix.length))];
-        Log.d(getClass().getName().toString(), "Generated Special Key: " + result);
+        Log.d(getClass().getName(), "Generated Special Key: " + result);
         return result;
     }
 }
